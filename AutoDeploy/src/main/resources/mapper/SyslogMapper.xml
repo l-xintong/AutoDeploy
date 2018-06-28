@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.autoDeploy.mapper.SyslogMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.autoDeploy.entity.Syslog">
+		<result column="type" property="type" />
+		<result column="title" property="title" />
+		<result column="remote_addr" property="remoteAddr" />
+		<result column="username" property="username" />
+		<result column="request_uri" property="requestUri" />
+		<result column="http_method" property="httpMethod" />
+		<result column="class_method" property="classMethod" />
+		<result column="params" property="params" />
+		<result column="session_id" property="sessionId" />
+		<result column="response" property="response" />
+		<result column="user_time" property="userTime" />
+		<result column="browser" property="browser" />
+		<result column="area" property="area" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="isp" property="isp" />
+		<result column="exception" property="exception" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="../css/bootstrap.min.css" />
+		<script src="/js/vue.min.js"></script>
+		<script src="/js/jquery-2.1.1.min.js"></script>
+	</head>
+	<body>
+		
+		<form id="manageDeploy">
+			<div>-----------------------------------------------------------------------------------------------------------------</div>
+			<div >
+			   	<div class="col-sm-2 ">名称</div>
+			   	<div class="col-sm-10">
+			      <input type="text"  v-model="manageDeploy.name"/>
+			    </div>
+			</div>
+			<div >
+			   	<div class="col-sm-2 " >版本</div>
+			   	<div class="col-sm-10">
+			      <input type="text"  v-model="manageDeploy.version"/>
+			    </div>
+			</div>
+			<div >
+			   	<div class="col-sm-2 ">状态</div>
+			   	<div class="col-sm-10">
+			      <select v-model="manageDeploy.status" >
+                    <option value="0">待发布</option>
+                    <option value="1">发布</option>
+                    <option value="2">回滚</option>
+               </select>
+			    </div>
+			</div>
+			<div >
+			   	<div class="col-sm-2 ">是否需要停机</div>
+			   	<div class="col-sm-10">
+			      
+			       <select v-model="manageDeploy.stop" >
+                    <option value="0">是</option>
+                    <option value="1">否</option>
+                </select>
+			    </div>
+			</div>
+			<div >
+			   	<div class="col-sm-2 ">执行时间</div>
+			   	<div class="col-sm-10">
+			      <input type="date"  v-model="manageDeploy.planTime" />
+			    </div>
+			</div>
+			<div>
+			   	<div class="col-sm-2">备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" v-model="manageDeploy.descrbe" placeholder="备注"/>
+			    </div>
+			</div>
+			<div>
+				<div>-----------------------------------------------------------------------------------------------------------------</div>
+				<div class="col-sm-2 "></div> 
+				<input type="button" class="btn btn-primary" @click="save" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning"  value="返回"/>
+			</div>
+		</form>
+	</div>
+	
+	<script>
+		var vm = new Vue({
+			el:'#manageDeploy',
+			data:{
+                manageDeploy:{}
+			},
+			methods:{
+				save:function(){
+					$.ajax({
+						type: "POST",
+			            url:' /manageDeploy/save',
+                        contentType: "application/json",
+			            data: JSON.stringify(vm.manageDeploy),
+			            success: function(r){
+			    	      if(r.code === 0){
+						     alert('操作成功', function(){
+						    	vm.reload();
+					   	});
+					      }else{
+						    alert(r.msg);
+					}
+				}
+					});
+					
+				},
+			}
+		})
+	</script>
+	</body>
+</html>

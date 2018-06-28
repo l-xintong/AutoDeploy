@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>渠道管理系统</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/plugins/layui/css/layui.css" media="all">
+  <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+  <link rel="stylesheet" href="/build/css/app.css" media="all">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/js/jquery-2.1.1.min.js"></script>
+  <script src="/plugins/layui/layui.js"></script>
+  <script src="/js/bootstarp/bootstrap.js"></script>
+  <script src="/js/bootstarp/bootstrap.min.js"></script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+          
+<blockquote class="layui-elem-quote layui-text">
+  上传渠道文件
+</blockquote><!-- style="visibility: hidden;" -->
+<form action="/uploadChannel/upload" method="post" enctype="multipart/form-data">
+
+    <div class="progress" id="progress_1" style="visibility: hidden;">
+    <div class="progress-bar" role="progressbar" id="progerss_id" aria-valuenow="60" 
+        aria-valuemin="0" aria-valuemax="100">
+        <span><font color="red" id="span_process"></font> </span>
+    </div>
+</div>
+ <label class="layui-form-label" style="width: 114px">渠道类型：</label>
+    <div class="layui-input-block">
+      <input type="text" name="fileType" style="width: 10%"  lay-verify="required" placeholder="请输入渠道类型如：QQ" autocomplete="off" class="layui-input">
+    </div>
+        <input type="file" name="fileUpload" id="file_upload"/>
+    <div>
+       <input type="submit" id="up_btn" style="margin-left: 24px;" class="btn btn-info" value="上传" />
+       <input type="button" value="重置" class="btn btn-danger" id="chong_zhi"/>
+    </div>
+</form>
+          
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+layui.use(['form', 'layedit', 'laydate','upload'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  var $ = layui.jquery
+  ,upload = layui.upload;
+  //创建一个编辑器
+  var editIndex = layedit.build('LAY_demo_editor');
+  $(function(){
+	  $("#up_btn").click(function(){
+		  var fileType=$(".layui-input").val();
+		  var fileload=$("#file_upload").val();
+		  if(!fileType){
+			  alert('渠道类型不能为空');
+			  return false;
+		  }
+		  if(!fileload){
+			  alert('请选择文件');
+			  return false;
+		  }
+		  if(fileType && fileload){
+				 setInterval(function(){
+					 jindu();
+			       },500);
+		  }
+	  });
+	  $("#chong_zhi").click(function(){
+		  $('form')[0].reset();
+	  });
+	  function jindu(){
+				$.ajax({
+		 			type:'GET',
+					url: "/uploadChannel/getUploadSchedule",
+					success: function (res) {
+						console.log(res)
+						$("#progress_1").removeAttr("style")
+						$("#progerss_id").attr("style","width:"+res+"%");
+						$("#span_process").html(res+"%完成");
+						if(res==100){
+							return;
+						}
+					},
+					error:function(){
+						window.location.href="/batch/error";
+					}
+				}); 
+			  
+	  }
+  })
+  
+});
+</script>
+
+</body>
+</html>

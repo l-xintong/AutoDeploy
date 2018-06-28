@@ -1,0 +1,17 @@
+Spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    #开启消息发送通知
+    publisher-confirms: true
+    #开启错误通知
+    publisher-returns: true
+
+    #开启ack
+    listener:
+      direct:
+         acknowledge-mode: manual
+      simple:
+         acknowledge-mode: manual

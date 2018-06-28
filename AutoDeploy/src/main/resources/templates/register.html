@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<script src="/js/jquery-2.1.1.min.js"></script>
+	<script src="/js/validate/common.js"></script>
+	<!--背景图片自动更换-->
+	<script src="/static/js/validate/supersized.3.2.7.min.js"></script>
+	<script src="/static/js/validate/supersized-init.js"></script>
+	<!--表单验证-->
+	<script src="/static/js/validate/jquery.validate.min.js?var1.14.0"></script>
+	<!-- 引入layer框架 -->
+	<script src="/static/js/layui/layui.js" charset="utf-8"></script>
+	<title>注册</title>
+	<link rel="stylesheet" href="/static/css/register_style.css" />
+<body>
+<div class="register-container">
+	<h1>渠道管理系统-注册</h1>
+	<div class="connect">
+		<p>面朝大海  春暖花开</p>
+	</div>
+	
+	<form action="" method="post" id="registerForm">
+		<div>
+			<input type="text" name="userName" class="username" placeholder="您的用户名" autocomplete="off"/>
+		</div>
+		<div>
+			<input type="password" name="password" class="password" placeholder="输入密码" oncontextmenu="return false" onpaste="return false" />
+		</div>
+		<div>
+			<input type="password" name="confirm_password" class="confirm_password" placeholder="再次输入密码" oncontextmenu="return false" onpaste="return false" />
+		</div>
+<!-- 		<div>
+			<input type="text" name="phone" class="phone_number" placeholder="输入手机号码" autocomplete="off" id="number"/>
+		</div>
+		<div>
+			<input type="email" name="email" class="email" placeholder="输入邮箱地址" oncontextmenu="return false" onpaste="return false" />
+		</div> -->
+
+		<button id="submit" type="button">注 册</button>
+	</form>
+	<a href="/batch/toLogin">
+		<button type="button" class="register-tis">已经有账号？</button>
+	</a>
+</div>
+</body>
+<script type="text/javascript">
+$(function(){
+	//点击注册
+	$("#submit").click(function(){
+		//进入注册逻辑
+		$.ajax({
+			type:'POST',
+			url:'/user/regist',
+			dataType:'json',
+			data:$("#registerForm").serialize(),
+			success:function(res){
+				//获取返回值
+				if (res.code=="0000") {
+					//请求成功--重定向下一步操作
+					window.location.href=res.nextOperate;
+				}else{
+					alert(res.msg)
+					window.location.href=res.nextOperate;
+			    }
+			},
+			error:function(){
+				window.location.href="/batch/error";
+			}
+			
+		});
+/* 		//提示信息
+		layui.use('layer', function(){
+			  var layer = layui.layer;
+			  layer.msg("点击注册",function(){
+				  
+			  })
+			});  */
+	});
+	return false;
+	})
+</script>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>渠道管理系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/js/layui/css/layui.css"  media="all">
+    <script src="/js/layui/layui.js" charset="utf-8"></script>
+    <script src="/js/jquery-2.1.1.min.js" charset="utf-8"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<blockquote class="layui-elem-quote layui-text">
+    <div class="layui-inline">
+        <label class="layui-form-label">任务名称：</label>
+        <div class="layui-input-inline">
+            <input type="username" id="name" name="username"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-inline">
+        <label class="layui-form-label">任务类型</label>
+        <div class="layui-input-inline">
+            <select name="modules" id="type" l lay-search="">
+                <option value=""></option>
+                <option value="0">所有</option>
+                <option value="1">首发</option>
+                <option value="2">更新</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-inline">
+        <button class="layui-btn layui-btn-warm layui-btn-radius" id="search">查询</button>
+        <button data-method="offset" class="layui-btn layui-btn-danger layui-btn-radius" id="add_job">新增</button>
+    </div>
+</blockquote>
+<div id="mydiv" style="align-content: center;height: 60%;width: 85%; margin: 0 0;">
+    <table class="layui-table" lay-data="{height:500, page:true, id:'test'}" lay-filter="tableinfo">
+        <thead>
+        <tr>
+            <th lay-data="{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}">ID</th>
+            <th lay-data="{field: 'jobName', title: '任务名称', width:150}">任务名称</th>
+            <th lay-data="{field: 'version', title: '版本', width:150}">版本</th>
+            <th lay-data="{field: 'jobTypeName', title: '任务类型', width:150}">任务类型</th>
+            <th lay-data="{field: 'packgeName', title: '发布包', width: 100}">发布包</th>
+            <th lay-data="{field: 'packgeUrl', title: '发布包安装路径', width: 100}">发布包安装路径</th>
+            <th lay-data="{field: 'remark', title: '备注', width: 100}">备注</th>
+            <!-- <th lay-data="{field: 'isSend', title: '是否同步', width: 100}">是否同步</th>-->
+            <th lay-data="{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}"></th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger" lay-event="reset">重置密码</a>
+    <a class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm"  lay-event="update">修改</a>
+    <a class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger" lay-event="delete">删除</a>
+</script>
+<script>
+    layui.use(['table','form','layer'], function(){
+        var table = layui.table,
+            $ = layui.$,
+            form = layui.form,
+            layer = layui.layer;
+        var mydata;
+        function init(){
+            $.ajax({
+                url:'/manageJobs/',
+                type:'get',
+                async:false,
+                dataType:'json',
+                success:function(res){
+                    mydata = res.data;
+                    console.log(res)
+                    table.reload('test',{
+                        data: mydata
+                    });
+                },
+                error:function(){
+                    alert('未请求成功');
+                }
+            });
+        }
+        init();
+        //根据条件搜索表格
+        $("#search").click(function(){
+            //获取搜索条件
+            var job_name=$("#name").val();
+            var job_type=$("#type").val();
+            
+            //调用后台获取数据方法
+            $.ajax({
+                url:'/manageJobs/',
+                type:'get',
+                async:false,
+                dataType:'json',
+                data:{
+                    'job_name':job_name,
+                    'job_type':job_type
+                    
+                },
+                success:function(res){
+                    console.log(res)
+                    mydata = res.data;
+                    table.reload('test',{
+                        data: mydata
+                    });
+                },
+                error:function(){
+                    alert('未请求成功');
+                }
+            });
+        });
+
+        $("#add_job").click(function(){
+            layer.open({
+                title: '添加任务',
+                type:2,
+                area:['75%','70%'],
+                content: '/base/toAdd'
+            });
+        });
+
+        //监听工具条
+        table.on('tool(tableinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data ,//获得当前行数据
+                layEvent = obj.event; //获得 lay-event 对应的值
+            //检查是否具有权限
+            if(layEvent==='update'){
+                //请求修改页面
+                layer.open({
+                    title: '修改用户',
+                    type:2,
+                    area:['75%','80%'],
+                    content: '/autoDeploy/user/edit/page'
+                });
+            }
+            //重置密码
+            if(layEvent==='reset'){
+                //请求重置密码页面
+                layer.open({
+                    title: '重置密码',
+                    type:2,
+                    area:['28%','40%'],
+                    content: '/autoDeploy/user/restPWD/page'
+                });
+                return;
+            }
+            if(dete==0){
+                return;
+            }
+            //进入对应的操作
+            if(layEvent === 'delete'){
+                //删除操作
+                $.ajax({
+                    url:"/autoDeploy/user",
+                    type:"delete",
+                    dataType:"json",
+                    data:{
+                        'id':data.id
+                    },
+                    success:function(msg){
+                        alert(msg.msg)
+                    },
+                    error:function(){
+                        alert("请求错误")
+                    }
+                });
+            }else if(layEvent ==='update'){
+                //修改操作
+            }else{
+                //重置密码操作
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

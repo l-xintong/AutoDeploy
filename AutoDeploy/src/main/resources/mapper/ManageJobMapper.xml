@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.autoDeploy.mapper.ManageJobMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.autoDeploy.entity.ManageJob">
+		<id column="id" property="id" />
+		<result column="job_name" property="jobName" />
+		<result column="version" property="version" />
+		<result column="job_type" property="jobType" />
+		<result column="packge_name" property="packgeName" />
+		<result column="packge_url" property="packgeUrl" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="Job_List" >
+	id,job_name,version,job_type,packge_name,packge_url,remark
+	</sql>
+
+	<select id="selectPageList"  resultType="com.autoDeploy.entity.ManageJob">
+		select
+		<include refid="Job_List"/>
+		from manage_job
+		<where>
+			<if test="job_name != null and job_name != ''">
+				AND job_name like concat('%',#{job_name},'%')
+			</if>
+			<if test="job_type != null and type != ''">
+				AND job_type = #{job_type}
+			</if>
+		</where>
+
+	</select>
+
+	<select id="findAll" resultType="com.autoDeploy.entity.po.PoManageJob">
+		select
+		<include refid="Job_List"/>
+		from manage_job
+		<where>
+			<if test="job_name != null">
+				AND job_name like concat('%',#{job_name},'%')
+			</if>
+			<if test="job_type != null">
+				AND job_type = #{job_type}
+			</if>
+		</where>
+
+	</select>
+
+</mapper>

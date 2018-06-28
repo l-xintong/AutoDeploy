@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/js/vue.min.js"></script>
+    <script src="/js/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <label> 是否发布</label>
+    <button @click="getMessage">确定</button>
+
+    <div v-show="!en">
+        <div>
+            <label>请输入验证码</label>
+        </div>
+
+        <input placeholder="str" v-model='str'>
+
+        <button type="button" @click='test' >验证</button>
+    </div>
+</div>
+
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+
+            str: '',
+            en:true,
+
+        },
+        // 在 `methods` 对象中定义方法
+        methods: {
+            getMessage: function () {
+                this.en = false;
+                $.ajax({
+                    type:"get",
+                    url:'/manageDeploy/getMessage',
+                    success:function(r){
+                        if(r.cod == 10000){
+                            alert('操作成功',function(){
+                                app.reload();
+                            })
+                        }else{
+                            alert(r.msg);
+                        }
+                    }
+                });
+
+            },
+            test: function(){
+              var  code =app.str;
+                $.ajax({
+                    type:"post",
+                    url:'/manageDeploy/testCod',
+                    dataType:'json',
+                    data:{
+                        'code':code
+                    },
+                    success:function(r){
+                        if(r.cod == 10000){
+                            alert('操作成功',function(){
+                                app.reload();
+                            })
+                        }else{
+                            alert(r.msg);
+                        }
+                    }
+                });
+
+            },
+
+
+        }
+    })
+
+
+
+</script>
+</body>
+
+
+</html>

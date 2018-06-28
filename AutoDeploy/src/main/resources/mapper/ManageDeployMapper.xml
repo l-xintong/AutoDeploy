@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.autoDeploy.mapper.ManageDeployMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.autoDeploy.entity.ManageDeploy">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="version" property="version" />
+		<result column="status" property="status" />
+		<result column="stop" property="stop" />
+		<result column="plan_time" property="planTime" />
+		<result column="time" property="time" />
+		<result column="descrbe" property="descrbe" />
+		<result column="username" property="username" />
+	</resultMap>
+    <select id="queryPage" resultType="com.autoDeploy.entity.ManageDeploy">
+		select *
+		from manage_deploy
+		<where>
+			<if test="name != null and name != ''">
+				AND name like concat('%',#{name},'%')
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status}
+			</if>
+		</where>
+
+	</select>
+
+</mapper>

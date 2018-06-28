@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>自动部署系统</title>
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" th:src="@{~/js/myJs.js}" media="all">
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <link rel="stylesheet" href="/build/css/app.css" media="all">
+    <script src="/plugins/layui/layui.js"></script>
+    <script src="/js/jquery-2.1.1.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app" class="layui-layout layui-layout-admin kit-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">自动部署系统</div>
+            <div class="layui-logo kit-logo-mobile">WangWei</div>
+            <ul class="layui-nav layui-layout-right kit-nav">
+                <li class="layui-nav-item">
+                    <a href="javascript:;" id="user_name">
+                                     <img src="http://m.zhengjinfan.cn/images/0.jpg" class="layui-nav-img">
+                    </a>
+                </li>
+                <li class="layui-nav-item"><a href="javascript:zhuxiao();"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a></li>
+            </ul>
+        </div>
+
+        <div  class="layui-side layui-bg-black kit-side">
+            <div class="layui-side-scroll">
+                <div class="kit-side-fold"><i class="fa fa-navicon" aria-hidden="true"></i></div>
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar>
+                    <router-link to="/user">
+                        <li class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span>用户管理</span></a>
+                        <dl class="layui-nav-child">
+                             <dd>
+                                <a href="javascript:;" kit-target data-options="{url:'',icon:'&#xe6c6;',title:'用户管理',id:'2'}" >
+                                <i class="layui-icon">&#xe628;</i><span>用户管理</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                    </router-link>
+                    <router-link to="/role">
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span>权限管理</span></a>
+                        <dl class="layui-nav-child">
+                             <dd>
+                                <a href="javascript:;" kit-target data-options="{url:'',icon:'&#xe6c6;',title:'权限管理',id:'2'}" >
+                                <i class="layui-icon">&#xe628;</i><span>权限管理</span></a>
+                            </dd>
+                                                         <dd>
+                                <a href="javascript:;" kit-target data-options="{url:'',icon:'&#xe6c6;',title:'资源管理',id:'2'}" >
+                                <i class="layui-icon">&#xe628;</i><span>资源管理</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                    </router-link>
+
+                        <li  class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span>项目管理</span></a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javascript:;" kit-target data-options="{url:'',icon:'&#xe6c6;',title:'用户管理',id:'2'}" >
+                                    <i class="layui-icon">&#xe628;</i><span>项目管理</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+
+                    <li  class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span>任务管理</span></a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="http://localhost:8080/base/toManageJob" kit-target data-options="{url:'/base/toManageJob',icon:'&#xe6c6;',title:'用户管理',id:'2'}" >
+                                    <i class="layui-icon">&#xe628;</i><span>任务管理</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li  class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span>发布管理</span></a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javascript:;" kit-target data-options="{url:'',icon:'&#xe6c6;',title:'用户管理',id:'2'}" >
+                                    <i class="layui-icon">&#xe628;</i><span>发布管理</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+
+
+
+
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="javascript:;"><i class="fa fa-plug" aria-hidden="true"></i><span>操作日志管理</span></a>
+                        <dl class="layui-nav-child">
+                             <dd>
+                                <a href="javascript:;" kit-target data-options="{url:'',icon:'&#xe6c6;',title:'操作日志查询',id:'2'}" >
+                                <i class="layui-icon">&#xe628;</i><span>操作日志查询</span></a>
+                            </dd>
+                                                         <dd>
+                                <a href="javascript:;" kit-target data-options="{url:'',icon:'&#xe6c6;',title:'操作日志统计',id:'2'}" >
+                                <i class="layui-icon">&#xe628;</i><span>操作日志统计</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+                    <!-- 头部区域（可配合layui已有的水平导航） -->
+            </div>
+        </div>
+        
+        <div class="layui-body" id="container">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;">暂无
+
+                <router-view></router-view></div>
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            <font style="align-content: center;">Copyright wangwei © 2018-2025 版权所有 翻版必究 </font>
+        </div>
+    </div>
+     <script>
+     document.oncontextmenu = function () {
+    	 alert("禁止右键查看");
+    	 return false; 
+    	 
+    };
+    document.onkeydown = function () {
+      if (window.event && window.event.keyCode == 123) {
+     	alert("禁止调试");
+          event.keyCode = 0;
+          event.returnValue = false;
+          return false;
+      }
+    };
+        var message;
+        layui.config({
+            base: '../static/build/js/'
+        }).use(['app', 'message'], function() {
+            var app = layui.app,
+                $ = layui.jquery,
+                layer = layui.layer;
+            //将message设置为全局以便子页面调用
+            message = layui.message;
+             //主入口
+            app.set({
+                type: 'iframe'
+            }).init(); 
+            $('#pay').on('click', function() {
+                layer.open({
+                    title: false,
+                    type: 1,
+                    content: '<img src="/build/images/pay.png" />',
+                    area: ['500px', '250px'],
+                    shadeClose: true
+                });
+            });
+        });
+
+
+        //注销用户
+/*         function zhuxiao(){
+        	//获取登陆用户
+        	var userName=$("#user_name").text();
+     		$.ajax({
+     			type:'POST',
+    			url: "/user/loginOut",
+    			data:{
+    				"userName":userName
+    			},
+    			dataType: "json",
+    			success: function (res) {
+    				window.location.href=res.nextOperate;
+    			},
+    			error:function(){
+    				window.location.href="/batch/error";
+    			}
+    		}); 
+        } */
+    //     $(function(){
+     //   	//获取用户登陆信息
+    // 		$.ajax({
+   //  			type:'GET',
+   // 			url: "/batch/getUser",
+    //			success: function (res) {
+    //				$("#user_name").text(" 欢迎您："+res)
+   // 			},
+   // 			error:function(){
+   // 				window.location.href="/batch/error";
+  //  			} 
+   // 		}); 
+  //      }) ;
+
+     // 0. 如果使用模块化机制编程，導入Vue和VueRouter，要调用 Vue.use(VueRouter)
+
+     // 1. 定义（路由）组件。
+     // 可以从其他文件 import 进来
+     const User = {template:
+     '<div id="userApp">' +
+         '<input>\n'+
+     '    <button class="layui-btn layui-btn-normal">百搭按钮</button>\n' +
+     '    <button class="layui-btn layui-btn-warm">暖色按钮</button>\n' +
+     '    <button class="layui-btn layui-btn-danger">警告按钮</button>\n</div>'+
+     '<div>role</div>'
+     }
+     const Role = { template: '<div>role</div>' }
+     // 2. 定义路由
+     // 每个路由应该映射一个组件。 其中"component" 可以是
+     // 通过 Vue.extend() 创建的组件构造器，
+     // 或者，只是一个组件配置对象。
+     // 我们晚点再讨论嵌套路由。
+     const routes = [
+         { path: '/user', component: User },
+         { path: '/role', component: Role }
+     ]
+
+     // 3. 创建 router 实例，然后传 `routes` 配置
+     // 你还可以传别的配置参数, 不过先这么简单着吧。
+     const router = new VueRouter({
+         routes:routes // （缩写）相当于 routes: routes
+     })
+
+     // 4. 创建和挂载根实例。
+     // 记得要通过 router 配置参数注入路由，
+     // 从而让整个应用都有路由功能
+     new Vue({
+         el:"#app",
+         router
+     });
+
+
+     // 现在，应用已经启动了！
+     </script>
+</body>
+
+</html>

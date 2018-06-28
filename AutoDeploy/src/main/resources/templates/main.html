@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>渠道管理系统</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../static/js/layui/css/layui.css"  media="all">
+  <script src="../static/js/layui/layui.js" charset="utf-8"></script>
+  <script src="../static/js/jquery-2.1.1.min.js" charset="utf-8"></script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<blockquote class="layui-elem-quote layui-text">
+  渠道文件详情
+</blockquote>
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script> 
+<div id="mydiv" style="align-content: center;height: 60%;width: 69%; margin: 0 0;">
+    <table class="layui-table" lay-data="{height:500, page:true, id:'test'}" lay-filter="tableinfo">
+        <thead>
+        <tr>
+            <th lay-data="{field: '_id', title: 'ID', width:220, sort: true, fixed: 'left'}">ID</th>
+            <th lay-data="{field: 'fileName', title: '文件名称', width:228}">文件名</th>
+            <th lay-data="{field: 'filePath', title: '文件路径', width:300}">文件路径</th>
+            <th lay-data="{field: 'fileTime', title: '上传时间', width:150}">上传时间</th>
+            <th lay-data="{field: 'fileType', title: '渠道类型', width: 100}">渠道类型</th>
+            <!-- <th lay-data="{field: 'isSend', title: '是否同步', width: 100}">是否同步</th>
+            <th lay-data="{fixed: 'right', width: 105, align:'center', toolbar: '#barDemo'}"></th> -->
+        </tr>
+        </thead>
+    </table>
+</div>
+<script>
+    layui.use(['table','form','layer'], function(){
+        var table = layui.table,
+            $ = layui.$,
+            form = layui.form,
+            layer = layui.layer;
+        var mydata;
+        function init(){
+            $.ajax({
+                url:'/uploadChannel/UploadFileInfo',
+                type:'get',
+                async:false,
+                dataType:'json',
+                success:function(res){
+                	console.log(res)
+                    mydata = res.data;
+                    table.reload('test',{
+                        data: mydata
+                    });
+                },
+                error:function(){
+                    alert('未请求成功');
+                }
+            });
+        }
+        init();
+        
+        //监听工具条
+        table.on('tool(tableinfo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+          var data = obj.data ,//获得当前行数据
+          layEvent = obj.event; //获得 lay-event 对应的值
+          //检查是否重复上传
+          var isUpload=data.isSend;
+          //文件路径
+          var filePath=data.filePath;
+          //对象序列id
+          var _id=data._id;
+          if(isUpload=="是"){
+        	  //表示已经上传
+        	  layer.alert("该渠道已同步,不可删除");
+        	  return 
+          }else{
+              if(layEvent === 'delete'){
+                	//点击上传，触发上传操作-调用对应接口
+                   $.ajax({
+                       url:'/uploadChannel/delete?filePath='+filePath+"&_id="+_id,
+                       type:'DELETE',
+                       success:function(res){
+                    	   //检查是否处理成功
+                    	   if(res.code=="00000"){
+                    		   //表示处理失败-弹出提示信息
+                    		   alert(res.msg)
+                    		   return false;
+                    	   }else{
+                    		   //表示处理成-弹出提示信息
+                    		   alert(res.msg)
+                    		   //刷新页面
+                    		   parent.location.reload();
+                    	   }
+                       }
+                   });
+                	}
+          }
+          });
+    });
+</script>
+
+</body>
+</html>

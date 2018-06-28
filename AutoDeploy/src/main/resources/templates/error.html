@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>出错啦</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link href="/css/error_style.css" rel="stylesheet" type="text/css" />
+<script src="/js/jquery-2.1.1.min.js"></script>
+</head>
+
+<body>
+	<div id="main">
+		<!-- header -->
+		<div id="header">
+			<h1>面朝大海    春暖花开---出错啦<span style="color: red;">喔豁，出错了! </span></h1>
+		</div>
+		<!-- content -->
+		<div id="content">
+			<ul class="nav">
+         	<li class="home"><a id="home_page">点击回到主页</a></li>
+         </ul>
+         <p>Hey, you're early! You don't belong here - at least not today. Besides, what you're looking for is not here anyways.<br />
+         So why don't you go to our <a href="#">homepage</a>, check out our <a href="#">sitemap</a> or try using the <a href="#">website search</a>.</p>
+		</div>
+	</div>
+</body>
+<script>
+//页面加载完毕，执行某些特定的查询
+$(function(){
+	 //查询session中的存放的相关错误信息
+		$.ajax({
+ 			type:'GET',
+			url: "/batch/errorInfo",
+			success: function (res) {
+				$("span").text(res);
+			}
+		}); 
+	 $("#home_page").click(function(){
+		 parent.location.reload();
+	 })
+ }) 
+</script>
+</html>
